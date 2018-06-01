@@ -113,10 +113,16 @@ class ViewController: UIViewController {
         //將toolbar放在textfield的inputAccessory
         heightText.inputAccessoryView = toolbar
         weightText.inputAccessoryView = toolbar
+        ageText.inputAccessoryView = toolbar
     }
     
+    //把鍵盤收起來
     @objc func hideKeyboard() {
         view.endEditing(true)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }
 
