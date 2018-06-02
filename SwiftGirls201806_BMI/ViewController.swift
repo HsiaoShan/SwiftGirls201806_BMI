@@ -31,9 +31,10 @@ class ViewController: UIViewController {
             resultLabel.text = "請輸入體重"
             return
         }
-        
+        //gender: 0=女, 1=男
+        let gender = genderSegment.selectedSegmentIndex
         let bmi = getBMI(height: height, weight: weight)
-        let result = checkBMIResult(age: age, bmi: bmi)
+        let result = checkBMIResult(age: age, gender: gender, bmi: bmi)
         resultLabel.text = "\(result)"
         print("\(result)...")
     }
@@ -52,21 +53,15 @@ class ViewController: UIViewController {
     //BMI＝體重(公斤)÷身高(公尺)÷身高(公尺)
     func getBMI(height: Double, weight: Double) -> Double {
         let heightm = height / 100
-        let bmi = weight / pow(Double(heightm), 2)
+        let bmi = weight / pow(heightm, 2)
         return round(bmi * 10) / 10
     }
     
-//    18歲（含）以上的成人BMI範圍值 體重是否正常
-//    BMI＜18.5 kg/m2
-//    「體重過輕」，需要多運動，均衡飲食，以增加體能，維持健康！
-//    18.5 kg/m2 ≤ BMI＜24 kg/m2
-//    恭喜！「健康體重」，要繼續保持！
-//    24 kg/m2 ≤ BMI＜27 kg/m2
-//    「體重過重」了，要小心囉，趕快力行「健康體重管理」！
-//    BMI ≥ 27 kg/m2
-//    啊～「肥胖」，需要立刻力行「健康體重管理」囉！
-    func checkBMIResult(age: Int, bmi: Double) -> String {
+    //BMI值判斷健康狀態
+    func checkBMIResult(age: Int, gender: Int, bmi: Double) -> String {
         guard age < 18 else {
+            //18歲（含）以上的成人BMI範圍值 體重是否正常
+            //https://obesity.hpa.gov.tw/TC/weight.aspx
             switch bmi {
             case ..<18.5:
                 return "BMI:\(bmi)\n 「體重過輕」，需要多運動，均衡飲食，以增加體能，維持健康！"
@@ -80,28 +75,20 @@ class ViewController: UIViewController {
                 return "BMI:\(bmi)"
             }
         }
-        return checkChildBMI(age: age, bmi: bmi)
-    }
-    
-    //未滿18歲BMI範圍值 體重是否正常
-    //https://obesity.hpa.gov.tw/TC/BMIproposal.aspx
-    func checkChildBMI(age: Int, bmi: Double) -> String {
-        let age17 = [[17.8, 23.5, 25.6],
-                     [17.3, 22.7, 25.3]]
-        if age == 17 {
-            let range = age17[genderSegment.selectedSegmentIndex]
-            switch bmi {
-            case range[0]..<range[1]:
-                return "BMI:\(bmi)\n 正常"
-            case range[1]..<range[2]:
-                return "BMI:\(bmi)\n 過重"
-            case range[2]...:
-                return "BMI:\(bmi)\n 肥胖"
-            default:
-                return "BMI:\(bmi)"
-            }
+        
+        //未滿18歲BMI範圍值 體重是否正常
+        //https://obesity.hpa.gov.tw/TC/BMIproposal.aspx
+        let range = ChildBMI.getRange(age: age, gender: gender)
+        switch bmi {
+        case range[0]..<range[1]:
+            return "BMI:\(bmi)\n 正常"
+        case range[1]..<range[2]:
+            return "BMI:\(bmi)\n 過重"
+        case range[2]...:
+            return "BMI:\(bmi)\n 肥胖"
+        default:
+            return "BMI:\(bmi)"
         }
-        return "BMI:\(bmi)"
     }
     
     //在鍵盤上面加上Done按鈕, 點了把鍵盤收起來
@@ -121,8 +108,9 @@ class ViewController: UIViewController {
         view.endEditing(true)
     }
     
+    //點畫面收鍵盤
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
 }
 
