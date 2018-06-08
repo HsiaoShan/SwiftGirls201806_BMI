@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         }
         //gender: 0=女, 1=男
         let gender = genderSegment.selectedSegmentIndex
-        let bmi = getBMI(height: height, weight: weight)
+        let bmi = getBMI(height: height / 100, weight: weight)
         let result = checkBMIResult(age: age, gender: gender, bmi: bmi)
         resultLabel.text = "\(result)"
         print("\(result)...")
@@ -52,9 +52,7 @@ class ViewController: UIViewController {
     //計算BMI值, 四捨五入取小數點後一位
     //BMI＝體重(公斤)÷身高(公尺)÷身高(公尺)
     func getBMI(height: Float, weight: Float) -> Float {
-        let heightm = height / 100
-        let bmi = weight / pow(heightm, 2)
-        
+        let bmi = weight / pow(height, 2)
         return round(bmi * 10) / 10
     }
     
