@@ -9,7 +9,7 @@
 import Foundation
 
 class ChildBMI {
-    static let data : [[[Double]]] = [
+    static let data : [[[Float]]] = [
         //[[女正常最小值, 女過重, 女肥胖], [男正常最小值, 男過重, 男肥胖]]
         [[11.5, 14.7, 15.5], [11.5, 14.8, 15.8]] //0
         ,[[14.2, 17.9, 19], [14.8, 18.3, 19.2]] //1
@@ -31,8 +31,7 @@ class ChildBMI {
         ,[[17.3, 22.7, 25.3], [17.8, 23.5, 25.6]] //17
     ]
     
-    static func getRange(age: Int, gender: Int) -> [Double] {
-        
+    static func getRange(age: Int, gender: Int) -> [Float] {
         return data[age][gender]
     }
 }

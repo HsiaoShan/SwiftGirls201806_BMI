@@ -23,11 +23,11 @@ class ViewController: UIViewController {
             resultLabel.text = "請輸入年齡"
             return
         }
-        guard let heightText = heightText.text, let height = Double(heightText)  else {
+        guard let heightText = heightText.text, let height = Float(heightText)  else {
             resultLabel.text = "請輸入身高"
             return
         }
-        guard let weightText = weightText.text, let weight = Double(weightText)  else {
+        guard let weightText = weightText.text, let weight = Float(weightText)  else {
             resultLabel.text = "請輸入體重"
             return
         }
@@ -51,14 +51,15 @@ class ViewController: UIViewController {
 
     //計算BMI值, 四捨五入取小數點後一位
     //BMI＝體重(公斤)÷身高(公尺)÷身高(公尺)
-    func getBMI(height: Double, weight: Double) -> Double {
+    func getBMI(height: Float, weight: Float) -> Float {
         let heightm = height / 100
         let bmi = weight / pow(heightm, 2)
+        
         return round(bmi * 10) / 10
     }
     
     //BMI值判斷健康狀態
-    func checkBMIResult(age: Int, gender: Int, bmi: Double) -> String {
+    func checkBMIResult(age: Int, gender: Int, bmi: Float) -> String {
         guard age < 18 else {
             //18歲（含）以上的成人BMI範圍值 體重是否正常
             //https://obesity.hpa.gov.tw/TC/weight.aspx
