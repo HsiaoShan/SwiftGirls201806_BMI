@@ -19,6 +19,8 @@ class ViewController: UIViewController {
     //點“計算”按鈕，開始計算BMI，顯示計算結果
     @IBAction func calculate(_ sender: Any) {
         //檢查欄位是否有輸入,並且是數字
+        //當TextField.text 是 “” 空字串, 在後面轉成數字的時候, 因為是空字串所以轉換數字失敗
+        //因此在TextField沒有輸入的情況下, 程式仍然進入了guard裡面
         guard let ageText = ageText.text, let age = Int(ageText)  else {
             resultLabel.text = "請輸入年齡"
             return
@@ -57,6 +59,7 @@ class ViewController: UIViewController {
     }
     
     //BMI值判斷健康狀態
+    //gender性別 0:女, 1:男
     func checkBMIResult(age: Int, gender: Int, bmi: Float) -> String {
         guard age < 18 else {
             //18歲（含）以上的成人BMI範圍值 體重是否正常
@@ -93,6 +96,9 @@ class ViewController: UIViewController {
     //在鍵盤上面加上Done按鈕, 點了把鍵盤收起來
     func setupKeyboard() {
         let toolbar = UIToolbar()
+        //target-action是來自Objective-C的概念
+        //target負責幫忙去接受事件(ex:觸控)
+        //action則是在target接受到事件之後去執行的動作
         let doneBtn = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(hideKeyboard))
         toolbar.items = [doneBtn]
         toolbar.sizeToFit()
@@ -103,12 +109,15 @@ class ViewController: UIViewController {
     }
     
     //把鍵盤收起來
+    //@objc是用來宣告hideKeyboard()這個func也可以被Objective-c的程式使用
     @objc func hideKeyboard() {
+        print("hide...")
         view.endEditing(true)
     }
     
     //點畫面收鍵盤
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("touch...")
         view.endEditing(true)
     }
 }
